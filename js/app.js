@@ -189,7 +189,9 @@ function initPage() {
     
     // 2) Check user and show signup modal if needed
     let user = getCurrentUser();
-    if (!user && !window.location.pathname.includes('index.html')) {
+    const path = window.location.pathname;
+    const isHomePage = path === '/' || path.endsWith('/index.html');
+    if (!user && !isHomePage) {
         showSignupModal();
         return;
     }
@@ -317,7 +319,7 @@ function updateNavbar(user) {
         signupBtn.parentNode.replaceChild(userDiv, signupBtn);
         
         userDiv.querySelector('#logout-btn').addEventListener('click', () => {
-            localStorage.removeItem('currentUser');
+            localStorage.removeItem('blackhole_current_user');
             location.reload();
         });
     }
@@ -329,6 +331,7 @@ function highlightActiveNavLink() {
     
     links.forEach(link => {
         const href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || /^[a-z][a-z\d+\-.]*:/i.test(href)) return;
         if (currentPath.includes(href) || (currentPath === '/' && href === 'index.html')) {
             link.classList.add('nav-active');
         } else {
@@ -339,9 +342,11 @@ function highlightActiveNavLink() {
 
 document.addEventListener('click', function(e) {
     const link = e.target.closest('a[href]');
-    if (!link || link.getAttribute('href').startsWith('http') || link.getAttribute('target')) return;
+    if (!link) return;
     
     const href = link.getAttribute('href');
+    // Skip empty, hash-only, external, or special-protocol links
+    if (!href || href.startsWith('#') || /^[a-z][a-z\d+\-.]*:/i.test(href) || link.getAttribute('target')) return;
     if (window.location.pathname.includes(href)) return;
     
     e.preventDefault();
