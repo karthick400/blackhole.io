@@ -1,0 +1,133 @@
+/* 1. Glow Pulse */
+@keyframes glow-pulse {
+	0%, 100% {
+		box-shadow: 0 0 12px 4px rgba(128,0,255,0.7);
+	}
+	50% {
+		box-shadow: 0 0 24px 12px rgba(128,0,255,1);
+	}
+}
+
+/* 2. Float Up Down */
+@keyframes float-up-down {
+	0%, 100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+}
+
+/* 3. Fade In Up */
+@keyframes fade-in-up {
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* 4. Spin Ring */
+@keyframes spin-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* 5. Typewriter */
+@keyframes typewriter {
+	from {
+		width: 0;
+	}
+	to {
+		width: 100%;
+	}
+}
+
+/* 6. Badge Pop */
+@keyframes badge-pop {
+	0% {
+		transform: scale(0);
+	}
+	60% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+/* 7. Bar Fill */
+@keyframes bar-fill {
+	from {
+		width: 0;
+	}
+	to {
+		width: var(--target-width, 100%);
+	}
+}
+
+/* 8. Confetti Burst */
+@keyframes confetti-burst {
+	0% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(2);
+	}
+}
+
+/* Utility Classes */
+.animate-glow {
+	animation: glow-pulse 1.2s infinite;
+}
+
+.animate-float {
+	animation: float-up-down 2.5s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+	animation: fade-in-up 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+.filter-bar select,
+.filter-bar input {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 8px;
+    padding: 8px 16px;
+    backdrop-filter: blur(10px);
+}
+
+.filter-bar select option {
+    background-color: #1a1a2e;
+    color: white;
+}
+
+select option:hover,
+select option:checked {
+    background-color: #7c3aed;
+    color: white;
+}

@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackHole.io - Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8J4J8L+H5Qz8C4W2Y8M2R7N2R5Q4hQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #111111;
+            --text: #ffffff;
+            --muted: #9ca3af;
+            --gold: #f59e0b;
+            --purple: #7c3aed;
+            --green: #22c55e;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+            font-family: "Manrope", "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 12% 6%, rgba(124, 58, 237, 0.15), transparent 35%),
+                radial-gradient(circle at 85% 18%, rgba(245, 158, 11, 0.13), transparent 30%),
+                radial-gradient(circle at 50% 100%, rgba(124, 58, 237, 0.08), transparent 42%),
+                #000000;
+        }
+
+        .brand,
+        .profile-name,
+        .section-title,
+        .modal-title,
+        .idea-title {
+            font-family: "Sora", "Manrope", sans-serif;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 120;
+            background: #000000;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.24);
+            backdrop-filter: blur(8px);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 0 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .brand img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-link {
+            color: #d1d5db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        .nav-active {
+            color: var(--gold) !important;
+            border-bottom: none !important;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 34px 24px 50px;
+        }
+
+        #loadingSpinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 55vh;
+            gap: 14px;
+            color: #d1d5db;
+        }
+
+        .spinner-ring {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(245, 158, 11, 0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #profileContent {
+            display: none;
+        }
+
+        .profile-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .profile-card {
+            width: min(100%, 760px);
+            background: #111111;
+            border-top: 3px solid #f59e0b;
+            border-right: 1px solid rgba(245, 158, 11, 0.18);
+            border-left: 1px solid rgba(245, 158, 11, 0.18);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.18);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+            position: relative;
+        }
+
+        .match-score-badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: #7c3aed;
+            color: #ffffff;
+            border-radius: 100px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .profile-avatar-shell {
+            width: 108px;
+            height: 108px;
+            border-radius: 50%;
+            margin: 0 auto 18px;
+            position: relative;
+            border: 2px solid rgba(245, 158, 11, 0.5);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.18);
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .profile-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            background: radial-gradient(circle at 30% 20%, rgba(124, 58, 237, 0.26), transparent 55%), #141414;
+        }
+
+        .man-outline {
+            position: relative;
+            width: 58px;
+            height: 64px;
+            display: block;
+        }
+
+        .man-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            border: 2px solid rgba(203, 213, 225, 0.9);
+            background: transparent;
+        }
+
+        .man-body {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 54px;
+            height: 34px;
+            transform: translateX(-50%);
+            border: 2px solid rgba(203, 213, 225, 0.85);
+            border-top-left-radius: 22px;
+            border-top-right-radius: 22px;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            border-bottom-width: 0;
+            background: transparent;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .profile-college {
+            color: #9ca3af;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .profile-joined {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .profile-bio {
+            font-size: 15px;
+            line-height: 1.65;
+            margin-bottom: 22px;
+            color: #9ca3af;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .skill-badge {
+            background: #f59e0b;
+            color: #221300;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            padding: 4px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .edit-profile-btn {
+            background: transparent;
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+            padding: 12px 30px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        .edit-profile-btn:hover {
+            background: #f59e0b;
+            color: #1a1200;
+            transform: translateY(-1px);
+        }
+
+        .upload-photo-btn {
+            margin-top: 0.7rem;
+            background: transparent;
+            color: #d1d5db;
+            border: 1px solid rgba(255, 255, 255, 0.34);
+            padding: 9px 18px;
+            border-radius: 999px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: none;
+        }
+
+        .upload-photo-btn:hover {
+            border-color: rgba(245, 158, 11, 0.65);
+            color: #f8d48d;
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .ideas-section {
+            margin-top: 38px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            text-align: center;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .idea-card {
+            background: #111111 !important;
+            border-left: 3px solid #f59e0b !important;
+            border-radius: 12px !important;
+            border-top: 1px solid rgba(245, 158, 11, 0.12) !important;
+            border-right: 1px solid rgba(245, 158, 11, 0.12) !important;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.12) !important;
+            padding: 20px !important;
+            margin-bottom: 0 !important;
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+        }
+
+        .owner-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .owner-emoji {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            font-size: 1.15rem;
+            flex: 0 0 40px;
+        }
+
+        .owner-details {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            margin-right: auto;
+        }
+
+        .owner-name {
+            color: #ffffff;
+            font-weight: 700;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .owner-college {
+            color: #9ca3af;
+            font-size: 0.84rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .time-ago {
+            color: #6b7280;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .idea-title {
+            margin: 0 0 0.9rem;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 800;
+            line-height: 1.35;
+            letter-spacing: 0.01em;
+        }
+
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-bottom: 1rem;
+        }
+
+        .tags-row span {
+            background: rgba(245, 158, 11, 0.22) !important;
+            color: #fcd37f !important;
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            border-radius: 999px !important;
+            font-size: 0.76rem !important;
+            font-weight: 700;
+            padding: 0.24rem 0.62rem !important;
+            margin-right: 0 !important;
+            display: inline-flex !important;
+            align-items: center;
+        }
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+        }
+
+        .react-btn,
+        .join-btn {
+            border: 0;
+            border-radius: 9px;
+            padding: 0.5rem 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .react-btn {
+            background: rgba(245, 158, 11, 0.14);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.45);
+        }
+
+        .join-btn {
+            background: #7c3aed;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .heat-label {
+            margin-left: auto;
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 0.84rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .heat-value {
+            color: #f59e0b;
+            font-weight: 800;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(6px);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #111111;
+            border: 1px solid rgba(245, 158, 11, 0.26);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 560px;
+            width: 90%;
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 22px;
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #9ca3af;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.22);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #6b7280;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 88px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 11px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: #7c3aed;
+            color: #ffffff;
+        }
+
+        .btn-save:hover {
+            background: #6d28d9;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: #d1d5db;
+            border: 1px solid rgba(156, 163, 175, 0.56);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(156, 163, 175, 0.12);
+        }
+
+        .skills-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .skills-input input {
+            flex: 1;
+        }
+
+        .skills-input button {
+            background: transparent;
+            border: 1px solid rgba(124, 58, 237, 0.6);
+            color: #ddd6fe;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .skills-input button:hover {
+            background: rgba(124, 58, 237, 0.22);
+        }
+
+        @media (max-width: 980px) {
+            .ideas-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .navbar-content {
+                min-height: auto;
+                flex-wrap: wrap;
+                padding: 12px 16px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: flex-start;
+                gap: 1rem;
+            }
+
+            .profile-card {
+                padding: 28px 20px;
+            }
+
+            .modal-content {
+                padding: 24px 18px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .ideas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="brand">
+                <img src="assets/logo.png" alt="BlackHole logo" onerror="this.style.display='none'">
+                <span>BlackHole.io</span>
+            </div>
+            <div class="nav-links">
+                <a href="explore.html" class="nav-link">Explore</a>
+                <a href="submit.html" class="nav-link">Submit Idea</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="loadingSpinner">
+            <div class="spinner-ring"></div>
+            <div>Loading profile...</div>
+        </div>
+
+        <div id="profileContent">
+            <div class="profile-section">
+                <div class="profile-card" id="profileCard">
+                    <div class="profile-avatar-shell" id="profileAvatarShell">
+                        <img class="profile-image" id="profileImage" alt="Profile image">
+                        <div class="profile-avatar-placeholder" id="profileAvatarPlaceholder">
+                            <span class="man-outline" aria-hidden="true">
+                                <span class="man-head"></span>
+                                <span class="man-body"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <input type="file" id="profileImageInput" accept="image/*" style="display:none;">
+                    <button type="button" class="upload-photo-btn" id="uploadPhotoBtn">Upload Photo</button>
+                    <div class="profile-name" id="profileName">Loading...</div>
+                    <div class="profile-college" id="profileCollege"></div>
+                    <div class="profile-joined" id="profileJoined"></div>
+                    <div class="profile-bio" id="profileBio"></div>
+                    <div class="skills-container" id="skillsContainer"></div>
+                    <button class="edit-profile-btn" id="editProfileBtn" style="display: none;">Edit Profile</button>
+                </div>
+            </div>
+
+            <div class="ideas-section" id="ideasSection" style="display: none;">
+                <div class="section-title">Ideas by <span id="ideasOwnerName">User</span></div>
+                <div class="ideas-grid" id="ideasGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-title">Edit Profile</div>
+            <form id="editForm">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="editName" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label>College</label>
+                    <input type="text" id="editCollege" placeholder="Your college">
+                </div>
+                <div class="form-group">
+                    <label>Skills</label>
+                    <div id="skillsList"></div>
+                    <div class="skills-input">
+                        <input type="text" id="newSkillInput" placeholder="Add a skill">
+                        <button type="button" onclick="addSkillInput()">Add</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea id="editBio" placeholder="Your bio"></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="modal-btn btn-save">Save Changes</button>
+                    <button type="button" class="modal-btn btn-cancel" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/users.js"></script>
+    <script src="js/ideas.js"></script>
+    <script src="js/matching.js"></script>
+    <script src="js/heat.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/gemini.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        // Keep renderIdeaCard call pattern intact while supporting string-returning implementations.
+        if (typeof window.renderIdeaCard === 'function') {
+            const originalRenderIdeaCard = window.renderIdeaCard;
+            window.renderIdeaCard = function(idea) {
+                const result = originalRenderIdeaCard(idea);
+                if (typeof result === 'string') {
+                    const template = document.createElement('template');
+                    template.innerHTML = result.trim();
+                    return template.content.firstElementChild || document.createElement('div');
+                }
+                return result;
+            };
+        }
+
+        // Sync heading with loaded profile name without changing existing profile flow.
+        function syncIdeasHeadingName() {
+            const profileNameEl = document.getElementById('profileName');
+            const ideasOwnerNameEl = document.getElementById('ideasOwnerName');
+            if (profileNameEl && ideasOwnerNameEl && profileNameEl.textContent.trim()) {
+                ideasOwnerNameEl.textContent = profileNameEl.textContent.trim();
+            }
+        }
+
+        const profileNameObserver = new MutationObserver(syncIdeasHeadingName);
+        const profileNameTarget = document.getElementById('profileName');
+        if (profileNameTarget) {
+            profileNameObserver.observe(profileNameTarget, { childList: true, characterData: true, subtree: true });
+        }
+        syncIdeasHeadingName();
+    </script>
+
+    <script>
+        let currentUser = null;
+        let profileUser = null;
+        let isOwnProfile = false;
+
+        function setProfileAvatar(user) {
+            const profileImageEl = document.getElementById('profileImage');
+            const placeholderEl = document.getElementById('profileAvatarPlaceholder');
+            if (!profileImageEl || !placeholderEl) {
+                return;
+            }
+
+            const imageUrl = user && typeof user.profileImage === 'string' ? user.profileImage.trim() : '';
+            if (imageUrl) {
+                profileImageEl.src = imageUrl;
+                profileImageEl.style.display = 'block';
+                placeholderEl.style.display = 'none';
+            } else {
+                profileImageEl.removeAttribute('src');
+                profileImageEl.style.display = 'none';
+                placeholderEl.style.display = 'flex';
+            }
+        }
+
+        function persistProfileImage(imageDataUrl) {
+            if (!profileUser || !profileUser.id) {
+                return;
+            }
+
+            profileUser.profileImage = imageDataUrl;
+
+            const current = getCurrentUser();
+            if (current && current.id === profileUser.id) {
+                updateCurrentUser({ profileImage: imageDataUrl });
+            }
+
+            const directoryUser = getUserById(profileUser.id) || {};
+            saveUserToDirectory(Object.assign({}, directoryUser, profileUser, { profileImage: imageDataUrl }));
+        }
+
+        function onProfileImageSelected(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(loadEvent) {
+                const imageDataUrl = loadEvent.target && typeof loadEvent.target.result === 'string' ? loadEvent.target.result : '';
+                if (!imageDataUrl) {
+                    return;
+                }
+                persistProfileImage(imageDataUrl);
+                setProfileAvatar(profileUser);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function initProfile() {
+            try {
+                // Get userId from URL query string
+                const params = new URLSearchParams(window.location.search);
+                let userId = params.get('id');
+
+                // Get current user
+                currentUser = await getCurrentUser();
+
+                // If no current user, create a guest user
+                if (!currentUser) {
+                    currentUser = await createGuestUser();
+                }
+
+                // If no userId, use current user
+                if (!userId) {
+                    userId = currentUser.id;
+                }
+
+                // Load profile user data
+                profileUser = await getUserById(userId);
+
+                // If profile user is null, create and use guest user
+                if (!profileUser) {
+                    profileUser = await createGuestUser();
+                }
+
+                // Check if it's own profile
+                isOwnProfile = currentUser.id === userId;
+
+                // Hide loading spinner
+                const loadingSpinner = document.getElementById('loadingSpinner');
+                if (loadingSpinner) {
+                    loadingSpinner.style.display = 'none';
+                }
+
+                // Show profile content
+                const profileContent = document.getElementById('profileContent');
+                if (profileContent) {
+                    profileContent.style.display = 'block';
+                }
+
+                // Display profile
+                displayProfile();
+
+                // Display ideas
+                displayIdeas();
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                // Create a guest user as fallback
+                profileUser = await createGuestUser();
+                currentUser = profileUser;
+                isOwnProfile = true;
+                displayProfile();
+            }
+        }
+
+      async function displayProfile() {
+            setProfileAvatar(profileUser);
+            document.getElementById('profileName').textContent = profileUser.name;
+            document.getElementById('profileCollege').textContent = profileUser.college || '';
+
+            // Format joined date
+            const joinDate = new Date(profileUser.joinedAt);
+            const options = { year: 'numeric', month: 'long' };
+            const formattedDate = joinDate.toLocaleDateString('en-US', options);
+            document.getElementById('profileJoined').textContent = `Member since ${formattedDate}`;
+
+            document.getElementById('profileBio').textContent = profileUser.bio || '';
+
+            // Display skills
+            const skillsContainer = document.getElementById('skillsContainer');
+            skillsContainer.innerHTML = '';
+            if (profileUser.skills && profileUser.skills.length > 0) {
+                profileUser.skills.forEach(skill => {
+                    const badge = document.createElement('div');
+                    badge.className = 'skill-badge';
+                    badge.textContent = skill;
+                    skillsContainer.appendChild(badge);
+                });
+            }
+
+            // Show edit button if own profile
+            const editBtn = document.getElementById('editProfileBtn');
+            const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+            const profileImageInput = document.getElementById('profileImageInput');
+            if (isOwnProfile) {
+                editBtn.style.display = 'block';
+                editBtn.onclick = openEditModal;
+                if (uploadPhotoBtn && profileImageInput) {
+                    uploadPhotoBtn.style.display = 'inline-flex';
+                    uploadPhotoBtn.onclick = function() {
+                        profileImageInput.click();
+                    };
+                    profileImageInput.onchange = onProfileImageSelected;
+                }
+            } else {
+                editBtn.style.display = 'none';
+                if (uploadPhotoBtn) {
+                    uploadPhotoBtn.style.display = 'none';
+                }
+            }
+
+            // Show match score if not own profile
+            const profileCard = document.getElementById('profileCard');
+            const existingBadge = profileCard.querySelector('.match-score-badge');
+            if (existingBadge) {
+                existingBadge.remove();
+            }
+
+            if (!isOwnProfile) {
+                const matchPercentage = matchScore(getCurrentUser()?.skills || [], []);
+                const badge = document.createElement('div');
+                badge.className = 'match-score-badge';
+                badge.textContent = `Match Score: ${matchPercentage}%`;
+                profileCard.appendChild(badge);
+            }
+        }
+
+        async function displayIdeas() {
+            const ideasSection = document.getElementById('ideasSection');
+            const ideasGrid = document.getElementById('ideasGrid');
+            ideasGrid.innerHTML = '';
+
+            // Get ideas - filter based on profile type
+            let ideas = profileUser.ideas || [];
+            if (!isOwnProfile) {
+                ideas = ideas.filter(idea => idea.public === true);
+            }
+
+            if (ideas.length === 0) {
+                ideasSection.style.display = 'none';
+                return;
+            }
+
+            ideasSection.style.display = 'block';
+            ideas.forEach(idea => {
+                const ideaCard = renderIdeaCard(idea);
+                ideasGrid.appendChild(ideaCard);
+            });
+        }
+
+        function openEditModal() {
+            document.getElementById('editName').value = profileUser.name;
+            document.getElementById('editCollege').value = profileUser.college || '';
+            document.getElementById('editBio').value = profileUser.bio || '';
+
+            const skillsList = document.getElementById('skillsList');
+            skillsList.innerHTML = '';
+            if (profileUser.skills && profileUser.skills.length > 0) {
+                profileUser.skills.forEach(skill => {
+                    const skillItem = document.createElement('div');
+                    skillItem.className = 'skills-input';
+                    skillItem.innerHTML = `
+                        <input type="text" value="${skill}" readonly>
+                        <button type="button" onclick="removeSkill(this)">Remove</button>
+                    `;
+                    skillsList.appendChild(skillItem);
+                });
+            }
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        function addSkillInput() {
+            const input = document.getElementById('newSkillInput');
+            if (input.value.trim()) {
+                const skillsList = document.getElementById('skillsList');
+                const skillItem = document.createElement('div');
+                skillItem.className = 'skills-input';
+                skillItem.innerHTML = `
+                    <input type="text" value="${input.value}" readonly>
+                    <button type="button" onclick="removeSkill(this)">Remove</button>
+                `;
+                skillsList.appendChild(skillItem);
+                input.value = '';
+            }
+        }
+
+        function removeSkill(btn) {
+            btn.parentElement.remove();
+        }
+
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const skills = Array.from(document.querySelectorAll('#skillsList input')).map(input => input.value);
+
+            const updatedData = {
+                name: document.getElementById('editName').value,
+                college: document.getElementById('editCollege').value,
+                bio: document.getElementById('editBio').value,
+                skills: skills,
+                profileImage: profileUser.profileImage || ''
+            };
+
+            // Call update function (assuming this exists in your backend API)
+            await updateUserProfile(updatedData);
+
+            profileUser = await getCurrentUser();
+            displayProfile();
+            displayIdeas();
+            closeEditModal();
+        });
+
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('editModal');
+            if (e.target === modal) {
+                closeEditModal();
+            }
+        });
+
+        // Initialize on page load
+       initPage();
+        initProfile();
+    </script>
+</body>
+</html>

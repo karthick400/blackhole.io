@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Submit Your Idea | BlackHole.io</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8J4J8L+H5Qz8C4W2Y8M2R7N2R5Q4hQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/components.css">
+	<link rel="stylesheet" href="css/animations.css">
+	<style>
+		body {
+			min-height: 100vh;
+			margin: 0;
+			background: #000000;
+			display: flex;
+			flex-direction: column;
+			font-family: "Manrope", "Segoe UI", sans-serif;
+			overflow-x: hidden;
+		}
+		.navbar .logo,
+		.glass-card h2,
+		.ai-result-title {
+			font-family: "Sora", "Manrope", sans-serif;
+		}
+		#space-particles-canvas {
+			position: fixed;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 0;
+			pointer-events: none;
+			background: radial-gradient(circle at 20% 15%, rgba(56, 189, 248, 0.08), transparent 35%), radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.1), transparent 30%), #000000;
+		}
+		.navbar {
+			width: 100%;
+			padding: 1.2rem 2.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 10;
+			background: rgba(30, 30, 40, 0.45);
+			box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+			backdrop-filter: blur(12px);
+			border-bottom: 1px solid rgba(255,255,255,0.08);
+		}
+		.navbar .logo {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			font-weight: 700;
+			font-size: 1.5rem;
+			color: #fff;
+			letter-spacing: 1px;
+			text-shadow: 0 2px 8px #0002;
+		}
+		.navbar .logo img {
+			width: 28px;
+			height: 28px;
+			object-fit: contain;
+			border-radius: 6px;
+		}
+		.navbar nav a {
+			color: #fff;
+			margin-left: 2rem;
+			text-decoration: none;
+			font-weight: 500;
+			transition: color 0.2s;
+		}
+		.navbar nav a:hover {
+			color: #a259ff;
+		}
+		.container {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+			position: relative;
+			z-index: 2;
+		}
+		.glass-card {
+			background: rgba(40, 40, 60, 0.55);
+			box-shadow: 0 16px 44px rgba(0, 0, 0, 0.42), 0 0 32px rgba(56, 189, 248, 0.09);
+			backdrop-filter: blur(18px);
+			border-radius: 1.5rem;
+			border: none;
+			padding: 2.5rem 2.5rem 2rem 2.5rem;
+			width: 100%;
+			max-width: 420px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		.glass-card h2 {
+			color: #38bdf8;
+			font-size: 1.45rem;
+			font-weight: 600;
+			margin-bottom: 2.2rem;
+			letter-spacing: 0.01em;
+			text-align: center;
+			text-shadow: 0 2px 8px #0002;
+		}
+		label[for="idea-title"],
+		label[for="idea-desc"] {
+			color: #38bdf8;
+		}
+		.form-group {
+			width: 100%;
+			margin-bottom: 1.6rem;
+			display: flex;
+			flex-direction: column;
+		}
+		label {
+			color: #e0e0e0;
+			font-size: 1rem;
+			margin-bottom: 0.6rem;
+			font-weight: 500;
+		}
+		input[type="text"], textarea {
+			width: 100%;
+			padding: 0.85rem 1rem;
+			border-radius: 0.9rem;
+			border: 2px solid rgba(255,255,255,0.5);
+			background: rgba(255,255,255,0.07);
+			color: #fff;
+			font-size: 1.05rem;
+			outline: none;
+			transition: border-color 0.25s, box-shadow 0.25s;
+			box-shadow: 0 2px 8px 0 rgba(255,255,255,0.08);
+		}
+		input[type="text"]:focus, textarea:focus {
+			border-color: #ffffff;
+			box-shadow: 0 0 0 3px rgba(255,255,255,0.22), 0 2px 8px 0 rgba(255,255,255,0.12);
+		}
+		textarea {
+			min-height: 110px;
+			resize: vertical;
+			font-family: inherit;
+		}
+		.char-counter {
+			margin-top: 0.4rem;
+			font-size: 0.98rem;
+			font-weight: 500;
+			text-align: right;
+			color: #bdbdbd;
+			transition: color 0.2s;
+			letter-spacing: 0.01em;
+		}
+		.char-counter.orange {
+			color: #ff9800;
+		}
+		.char-counter.red {
+			color: #ff3b3b;
+		}
+		.submit-btn {
+			margin-top: 1.2rem;
+			width: 100%;
+			padding: 1rem 0;
+			border: none;
+			border-radius: 1rem;
+			font-size: 1.13rem;
+			font-weight: 600;
+			color: #fff;
+			background: linear-gradient(90deg, #a259ff 0%, #4b6cb7 100%);
+			box-shadow: 0 4px 16px 0 rgba(162,89,255,0.13);
+			cursor: pointer;
+			transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+		}
+		.submit-btn:hover, .submit-btn:focus {
+			background: linear-gradient(90deg, #4b6cb7 0%, #a259ff 100%);
+			box-shadow: 0 6px 24px 0 rgba(162,89,255,0.22);
+			transform: translateY(-2px) scale(1.02);
+		}
+		@media (max-width: 600px) {
+			.glass-card {
+				padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+				max-width: 98vw;
+			}
+			.navbar {
+				padding: 1rem 1rem;
+			}
+		}
+		#loading-state {
+			display: none;
+			position: fixed;
+			inset: 0;
+			z-index: 100;
+			background: rgba(30,32,40,0.92);
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		#loading-state .loading-inner {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		#ai-results {
+			display: none;
+			gap: 1.2rem;
+			width: 100%;
+			margin-top: 1rem;
+		}
+		#tags-container {
+			display: flex;
+			width: 100%;
+			flex-wrap: wrap;
+			gap: 8px;
+			margin-top: 16px;
+			min-height: 40px;
+			justify-content: flex-start;
+		}
+		#teammate-card {
+			display: none;
+			width: 100%;
+			margin-top: 0.9rem;
+			padding: 0.95rem;
+			border-radius: 1rem;
+			background: rgba(25, 25, 38, 0.62);
+			border: 1.5px solid #a259ff;
+			box-shadow: 0 0 0 1px rgba(162, 89, 255, 0.45), 0 0 18px rgba(162, 89, 255, 0.4);
+		}
+		.teammate-card-header {
+			display: flex;
+			align-items: center;
+			margin-bottom: 0.8rem;
+		}
+		.ai-suggestion-badge {
+			display: inline-flex;
+			align-items: center;
+			padding: 0.3rem 0.75rem;
+			border-radius: 999px;
+			font-size: 0.84rem;
+			font-weight: 700;
+			letter-spacing: 0.01em;
+			color: #ffffff;
+			background: linear-gradient(90deg, #8b5cf6 0%, #a855f7 100%);
+		}
+		#teammate-roles {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.45rem;
+			margin: 0.45rem 0 0.7rem;
+		}
+		.role-pill {
+			display: inline-flex;
+			align-items: center;
+			padding: 0.25rem 0.72rem;
+			border-radius: 999px;
+			font-size: 0.82rem;
+			font-weight: 600;
+			color: #ffffff;
+			background: rgba(6, 182, 212, 0.95);
+			box-shadow: 0 0 10px rgba(6, 182, 212, 0.38);
+		}
+		#teammate-size {
+			margin: 0;
+			font-size: 0.9rem;
+			color: #e7e7ee;
+		}
+		.teammate-toggle-row {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.8rem;
+			margin-top: 0.85rem;
+		}
+		.teammate-toggle-label {
+			color: #f3f3f5;
+			font-size: 0.95rem;
+			font-weight: 600;
+			margin: 0;
+		}
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 46px;
+			height: 26px;
+		}
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(255, 255, 255, 0.2);
+			transition: 0.25s;
+			border-radius: 999px;
+		}
+		.slider:before {
+			position: absolute;
+			content: '';
+			height: 20px;
+			width: 20px;
+			left: 3px;
+			bottom: 3px;
+			background-color: #ffffff;
+			transition: 0.25s;
+			border-radius: 50%;
+		}
+		input:checked + .slider {
+			background-color: #16c47f;
+		}
+		input:checked + .slider:before {
+			transform: translateX(20px);
+		}
+		#teammate-privacy-status {
+			margin: 0.8rem 0 0;
+			font-size: 0.86rem;
+			font-weight: 600;
+			color: #9ca3af;
+		}
+		#teammate-privacy-status.open {
+			color: #16c47f;
+		}
+		.ai-result-title {
+			margin: 0;
+			color: #ffffff;
+			font-size: 1.3rem;
+			font-weight: 700;
+			text-align: center;
+		}
+		.ai-metric {
+			width: 100%;
+		}
+		.ai-metric-head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 0.45rem;
+			color: #f3f3f5;
+			font-weight: 600;
+		}
+		.ai-bar-track {
+			width: 100%;
+			height: 11px;
+			border-radius: 999px;
+			background: rgba(255, 255, 255, 0.14);
+			overflow: hidden;
+		}
+		.ai-bar-fill {
+			width: 0;
+			height: 100%;
+			border-radius: 999px;
+			background: #ff6b6b;
+		}
+		.ai-bar-fill.green {
+			background: #16c47f;
+		}
+		.ai-bar-fill.orange {
+			background: #f59e0b;
+		}
+		.ai-bar-fill.red {
+			background: #ef4444;
+		}
+		.ai-bar-fill.animate {
+			animation: ai-bar-fill 1.5s ease-out forwards;
+		}
+		#ai-verdict {
+			min-height: 5.2rem;
+			padding: 0.95rem 1rem;
+			border-radius: 0.9rem;
+			background: rgba(255, 255, 255, 0.08);
+			color: #ffffff;
+			line-height: 1.45;
+			letter-spacing: 0.01em;
+			font-size: 0.98rem;
+		}
+		@keyframes ai-bar-fill {
+			from {
+				width: 0;
+			}
+			to {
+				width: var(--target-width, 0%);
+			}
+		}
+	/* Shake error animation */
+	.shake-error {
+		animation: shake 0.3s linear;
+	}
+	@keyframes shake {
+		0% { transform: translateX(0); }
+		20% { transform: translateX(-8px); }
+		40% { transform: translateX(8px); }
+		60% { transform: translateX(-8px); }
+		80% { transform: translateX(8px); }
+		100% { transform: translateX(0); }
+	}
+	/* Confirm button styling */
+	#confirm-post-btn {
+		display: none;
+		margin: 32px auto 0 auto;
+		padding: 14px 32px;
+		font-size: 1.2em;
+		background: #222;
+		color: #fff;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+	#confirm-post-btn:hover {
+		background: #444;
+	}
+	/* Confetti burst animation */
+	.confetti-burst {
+		animation: confetti-burst 0.8s;
+	}
+	@keyframes confetti-burst {
+		0% { opacity: 1; }
+		100% { opacity: 0; }
+	}
+</style>
+</head>
+<body>
+	<canvas id="space-particles-canvas" aria-hidden="true"></canvas>
+	<div class="navbar">
+		<div class="logo"><img src="assets/logo.png" alt="BlackHole logo" onerror="this.style.display='none'"><span>BlackHole.io</span></div>
+		<nav>
+			<a href="index.html">Home</a>
+			<a href="about.html">About</a>
+			<a href="submit.html">Submit Idea</a>
+		</nav>
+	</div>
+	<div class="container">
+		<form class="glass-card" autocomplete="off">
+			<h2><i class="fa-solid fa-cube" aria-hidden="true"></i> Drop Your Idea Into The Void</h2>
+			<div class="form-group">
+				<label for="idea-title">Idea Title</label>
+				<input type="text" id="idea-title" name="idea-title" placeholder="What's your big idea?" maxlength="80" required>
+			</div>
+			<div class="form-group">
+				<label for="idea-desc">Describe your idea</label>
+				<textarea id="idea-desc" name="idea-desc" maxlength="280" required></textarea>
+				<div class="char-counter" id="charCounter">280</div>
+			</div>
+			<button type="submit" class="submit-btn">Analyze My Idea &rarr;</button>
+			<div id="tags-container" aria-label="AI tags"></div>
+			<section id="teammate-card" aria-live="polite">
+				<div class="teammate-card-header">
+					<span class="ai-suggestion-badge">✨ AI Suggestion</span>
+				</div>
+				<div class="teammate-card-text">
+					<p id="teammate-size">Suggested team size: --</p>
+					<div id="teammate-roles" aria-label="Suggested roles"></div>
+				</div>
+				<div class="teammate-toggle-row">
+					<p class="teammate-toggle-label">Open to Teammates?</p>
+					<label class="switch" for="teammate-toggle">
+						<input type="checkbox" id="teammate-toggle" name="teammate-toggle">
+						<span class="slider"></span>
+					</label>
+				</div>
+				<p id="teammate-privacy-status">Your idea will be saved privately</p>
+			</section>
+			<section id="ai-results" aria-live="polite">
+				<h3 class="ai-result-title">AI Evaluation</h3>
+
+				<div class="ai-metric">
+					<div class="ai-metric-head">
+						<span>Feasibility</span>
+						<span id="score-feasibility">0%</span>
+					</div>
+					<div class="ai-bar-track">
+						<div id="bar-feasibility" class="ai-bar-fill"></div>
+					</div>
+				</div>
+
+				<div class="ai-metric">
+					<div class="ai-metric-head">
+						<span>Originality</span>
+						<span id="score-originality">0%</span>
+					</div>
+					<div class="ai-bar-track">
+						<div id="bar-originality" class="ai-bar-fill"></div>
+					</div>
+				</div>
+
+				<div class="ai-metric">
+					<div class="ai-metric-head">
+						<span>Impact</span>
+						<span id="score-impact">0%</span>
+					</div>
+					<div class="ai-bar-track">
+						<div id="bar-impact" class="ai-bar-fill"></div>
+					</div>
+				</div>
+
+				<div id="ai-verdict"></div>
+			</section>
+		</form>
+	</div>
+	<script>
+		(function initSpaceParticles() {
+			const canvas = document.getElementById('space-particles-canvas');
+			if (!canvas) {
+				return;
+			}
+
+			const ctx = canvas.getContext('2d');
+			if (!ctx) {
+				return;
+			}
+
+			const particles = [];
+			const count = 130;
+			let width = 0;
+			let height = 0;
+
+			function random(min, max) {
+				return Math.random() * (max - min) + min;
+			}
+
+			function resize() {
+				width = window.innerWidth;
+				height = window.innerHeight;
+				const dpr = Math.min(window.devicePixelRatio || 1, 2);
+				canvas.width = Math.floor(width * dpr);
+				canvas.height = Math.floor(height * dpr);
+				canvas.style.width = width + 'px';
+				canvas.style.height = height + 'px';
+				ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			}
+
+			function createParticle() {
+				return {
+					x: random(0, width),
+					y: random(0, height),
+					vx: random(-0.22, 0.22),
+					vy: random(-0.22, 0.22),
+					r: random(0.7, 2.2),
+					a: random(0.2, 0.85),
+					h: random(0, Math.PI * 2)
+				};
+			}
+
+			function seed() {
+				particles.length = 0;
+				for (let i = 0; i < count; i += 1) {
+					particles.push(createParticle());
+				}
+			}
+
+			function drawBackground() {
+				ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+				ctx.fillRect(0, 0, width, height);
+			}
+
+			function draw() {
+				drawBackground();
+
+				for (let i = 0; i < particles.length; i += 1) {
+					const p = particles[i];
+					p.x += p.vx + Math.sin(performance.now() * 0.0004 + p.h) * 0.03;
+					p.y += p.vy + Math.cos(performance.now() * 0.00035 + p.h) * 0.03;
+
+					if (p.x < -10) p.x = width + 10;
+					if (p.x > width + 10) p.x = -10;
+					if (p.y < -10) p.y = height + 10;
+					if (p.y > height + 10) p.y = -10;
+
+					ctx.beginPath();
+					ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+					ctx.fillStyle = 'rgba(186, 230, 253,' + p.a.toFixed(2) + ')';
+					ctx.fill();
+				}
+
+				for (let i = 0; i < particles.length; i += 1) {
+					for (let j = i + 1; j < particles.length; j += 1) {
+						const p1 = particles[i];
+						const p2 = particles[j];
+						const dx = p1.x - p2.x;
+						const dy = p1.y - p2.y;
+						const dist = Math.hypot(dx, dy);
+						if (dist < 120) {
+							ctx.beginPath();
+							ctx.moveTo(p1.x, p1.y);
+							ctx.lineTo(p2.x, p2.y);
+							ctx.strokeStyle = 'rgba(125, 211, 252,' + ((1 - dist / 120) * 0.12).toFixed(3) + ')';
+							ctx.lineWidth = 1;
+							ctx.stroke();
+						}
+					}
+				}
+
+				requestAnimationFrame(draw);
+			}
+
+			window.addEventListener('resize', resize);
+			resize();
+			seed();
+			draw();
+		})();
+	</script>
+	<script>
+		const textarea = document.getElementById('idea-desc');
+		const counter = document.getElementById('charCounter');
+		const maxChars = 280;
+		textarea.addEventListener('input', function() {
+			const remaining = maxChars - textarea.value.length;
+			counter.textContent = remaining;
+			counter.classList.remove('orange', 'red');
+			if (remaining < 30) {
+				counter.classList.add('red');
+			} else if (remaining < 80) {
+				counter.classList.add('orange');
+			}
+		});
+	</script>
+	<div id="loading-state">
+	<div class="loading-inner">
+		<svg width="90" height="90" viewBox="0 0 90 90" style="margin-bottom:2.2rem;">
+			<defs>
+				<linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" stop-color="#7c3aed"/>
+					<stop offset="100%" stop-color="#06b6d4"/>
+				</linearGradient>
+				<conicGradient id="conic-gradient"/>
+			</defs>
+			<circle cx="45" cy="45" r="36" fill="none" stroke="#232526" stroke-width="10"/>
+			<circle cx="45" cy="45" r="36" fill="none" stroke="url(#ring-gradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2 56.55" stroke-dashoffset="0" style="transform-origin:50% 50%; animation: spin-ring 1s linear infinite;" class="spin-ring"/>
+		</svg>
+		<p id="loading-typewriter" style="color:#fff; font-size:1.18rem; font-weight:500; letter-spacing:0.01em; text-align:center; min-height:1.5em;">
+			<span class="typewriter-text"></span>
+		</p>
+	</div>
+</div>
+<script>
+function showLoading() {
+	document.getElementById('loading-state').style.display = 'flex';
+	document.querySelector('.glass-card').style.display = 'none';
+	startTypewriter();
+}
+function hideLoading() {
+	document.getElementById('loading-state').style.display = 'none';
+	document.querySelector('.glass-card').style.display = 'flex';
+}
+const typewriterText = 'AI is analyzing your idea...';
+let typewriterTimer = null;
+let verdictTimer = null;
+const scoreTimers = {
+	feasibility: null,
+	originality: null,
+	impact: null
+};
+
+function getScoreColor(score) {
+	if (score > 70) {
+		return 'green';
+	}
+	if (score >= 40) {
+		return 'orange';
+	}
+	return 'red';
+}
+
+function clampScore(value) {
+	const parsed = Number(value);
+	if (Number.isNaN(parsed)) {
+		return 0;
+	}
+	return Math.max(0, Math.min(100, Math.round(parsed)));
+}
+
+function animateMetric(metric, score) {
+	const scoreEl = document.getElementById(`score-${metric}`);
+	const barEl = document.getElementById(`bar-${metric}`);
+
+	if (!scoreEl || !barEl) {
+		return;
+	}
+
+	clearInterval(scoreTimers[metric]);
+	scoreEl.textContent = '0%';
+
+	barEl.classList.remove('green', 'orange', 'red', 'animate');
+	barEl.style.width = '0%';
+	barEl.classList.add(getScoreColor(score));
+	barEl.style.setProperty('--target-width', `${score}%`);
+	void barEl.offsetWidth;
+	barEl.classList.add('animate');
+
+	const duration = 1500;
+	const intervalMs = 30;
+	const steps = Math.max(1, Math.floor(duration / intervalMs));
+	let step = 0;
+
+	scoreTimers[metric] = setInterval(() => {
+		step += 1;
+		const current = Math.min(score, Math.round((score * step) / steps));
+		scoreEl.textContent = `${current}%`;
+		if (step >= steps) {
+			scoreEl.textContent = `${score}%`;
+			clearInterval(scoreTimers[metric]);
+			scoreTimers[metric] = null;
+		}
+	}, intervalMs);
+}
+
+function typeVerdict(text) {
+	const verdictEl = document.getElementById('ai-verdict');
+	if (!verdictEl) {
+		return;
+	}
+	clearInterval(verdictTimer);
+	verdictEl.textContent = '';
+	let index = 0;
+	verdictTimer = setInterval(() => {
+		verdictEl.textContent = text.slice(0, index + 1);
+		index += 1;
+		if (index >= text.length) {
+			clearInterval(verdictTimer);
+			verdictTimer = null;
+		}
+	}, 25);
+}
+
+function displayTags(tagsArray) {
+	const container = document.getElementById('tags-container');
+	container.innerHTML = '';
+	container.style.display = 'flex';
+	container.style.flexWrap = 'wrap';
+	container.style.gap = '8px';
+	container.style.marginTop = '16px';
+
+	tagsArray.forEach(function(tag, index) {
+		setTimeout(function() {
+			const badge = document.createElement('span');
+			badge.textContent = '#' + tag;
+			badge.style.backgroundColor = '#06b6d4';
+			badge.style.color = 'white';
+			badge.style.padding = '4px 14px';
+			badge.style.borderRadius = '100px';
+			badge.style.fontSize = '14px';
+			badge.style.boxShadow = '0 0 8px rgba(6,182,212,0.5)';
+			badge.style.animation = 'badge-pop 0.3s ease forwards';
+			container.appendChild(badge);
+		}, index * 200);
+	});
+}
+
+function updateTeamToggleStatus() {
+	const statusEl = document.getElementById('teammate-privacy-status');
+	const isOpen = getTeamToggleValue();
+
+	if (!statusEl) {
+		return;
+	}
+
+	if (isOpen) {
+		statusEl.textContent = 'Your idea will be visible for team matching';
+		statusEl.classList.add('open');
+	} else {
+		statusEl.textContent = 'Your idea will be saved privately';
+		statusEl.classList.remove('open');
+	}
+}
+
+function populateTeammateCard(data) {
+	const card = document.getElementById('teammate-card');
+	const rolesContainer = document.getElementById('teammate-roles');
+	const sizeEl = document.getElementById('teammate-size');
+
+	if (!card || !rolesContainer || !sizeEl) {
+		return;
+	}
+
+	const result = data || {};
+	const roles = Array.isArray(result.suggestedRoles) ? result.suggestedRoles : [];
+	const teamSize = result.suggestedTeamSize;
+
+	rolesContainer.innerHTML = '';
+	roles.forEach((role) => {
+		if (!role) {
+			return;
+		}
+		const pill = document.createElement('span');
+		pill.className = 'role-pill';
+		pill.textContent = String(role);
+		rolesContainer.appendChild(pill);
+	});
+
+	if (roles.length === 0) {
+		const fallback = document.createElement('span');
+		fallback.className = 'role-pill';
+		fallback.textContent = 'Generalist';
+		rolesContainer.appendChild(fallback);
+	}
+
+	sizeEl.textContent = `Suggested team size: ${teamSize || '--'}`;
+	card.style.display = 'block';
+	updateTeamToggleStatus();
+}
+
+function getTeamToggleValue() {
+	const toggleEl = document.getElementById('teammate-toggle');
+	return Boolean(toggleEl && toggleEl.checked);
+}
+
+const teammateToggle = document.getElementById('teammate-toggle');
+if (teammateToggle) {
+	teammateToggle.addEventListener('change', updateTeamToggleStatus);
+	updateTeamToggleStatus();
+}
+
+function displayAIResults(data) {
+	const result = data || {};
+	const feasibility = clampScore(result.feasibility);
+	const originality = clampScore(result.originality);
+	const impact = clampScore(result.impact);
+	const verdict = typeof result.verdict === 'string' && result.verdict.trim()
+		? result.verdict.trim()
+		: 'No verdict available.';
+
+	animateMetric('feasibility', feasibility);
+	animateMetric('originality', originality);
+	animateMetric('impact', impact);
+	typeVerdict(verdict);
+	displayTags(data.tags);
+	populateTeammateCard(data);
+
+	document.getElementById('ai-results').style.display = 'flex';
+}
+
+const ideaForm = document.querySelector('.glass-card');
+
+if (ideaForm) {
+	ideaForm.addEventListener('submit', async function(event) {
+		event.preventDefault();
+
+		// Step 1: Read title and description
+		const titleEl = document.getElementById('idea-title');
+		const descEl = document.getElementById('idea-desc');
+		const title = titleEl ? titleEl.value.trim() : '';
+		const description = descEl ? descEl.value.trim() : '';
+
+		// Step 2: Validate and add shake-error class if empty
+		if (!title) {
+			if (titleEl) {
+				titleEl.classList.add('shake-error');
+				setTimeout(() => titleEl.classList.remove('shake-error'), 300);
+			}
+		}
+		if (!description) {
+			if (descEl) {
+				descEl.classList.add('shake-error');
+				setTimeout(() => descEl.classList.remove('shake-error'), 300);
+			}
+		}
+		if (!title || !description) {
+			return;
+		}
+
+		// Step 3: Show loading
+		document.getElementById('ai-results').style.display = 'none';
+		showLoading();
+
+		try {
+			// Step 4: Call analyzeIdea (async)
+			const result = await analyzeIdea(title, description);
+			
+			// Step 5: Hide loading
+			hideLoading();
+			ideaForm.style.display = 'none';
+			
+			// Step 6: Display AI results
+			displayAIResults(result);
+			
+			// Step 7: Display tags
+			displayTags(result.tags);
+			
+			// Step 8: Populate teammate card
+			populateTeammateCard(result);
+			
+			// Step 9: Show confirm & post button
+			let confirmBtn = document.getElementById('confirm-post-btn');
+			if (!confirmBtn) {
+				confirmBtn = document.createElement('button');
+				confirmBtn.id = 'confirm-post-btn';
+				confirmBtn.type = 'button';
+				confirmBtn.textContent = 'Confirm & Post Idea →';
+				confirmBtn.style.display = 'block';
+				ideaForm.appendChild(confirmBtn);
+			} else {
+				confirmBtn.style.display = 'block';
+			}
+			
+			// Step 10-15: Handle confirm button click
+			confirmBtn.addEventListener('click', async function(confirmEvent) {
+				confirmEvent.preventDefault();
+				
+				// Step 10: Get team toggle state
+				const isOpenToTeam = getTeamToggleValue();
+				
+				// Step 11: Get current user or default guest
+				let currentUser = getCurrentUser();
+				if (!currentUser) {
+					currentUser = {
+						id: 'guest-' + Date.now(), 
+						name: 'Guest User',
+						email: 'guest@blackhole.io'   
+					};
+				}
+				
+				// Step 12: Build full idea object
+				const ideaObject = {
+					id: 'idea-' + Date.now(),
+					title: title,
+					description: description,
+					userId: currentUser.id,
+					userName: currentUser.name,
+					userEmail: currentUser.email,
+					openToTeammates: isOpenToTeam,
+					tags: result.tags || [],
+					feasibility: result.feasibility || 0,
+					originality: result.originality || 0,
+					impact: result.impact || 0,
+					verdict: result.verdict || '',
+					suggestedTeamSize: result.suggestedTeamSize || '',
+					suggestedRoles: result.suggestedRoles || [],
+					createdAt: new Date().toISOString()
+				};
+				
+				// Step 13: Save idea
+				await saveIdea(ideaObject);
+				
+				// Step 14: Play confetti animation
+				document.body.classList.add('confetti-burst');
+				
+				// Step 15: Redirect after 1 second
+				setTimeout(() => {
+					window.location.href = 'explore.html';
+				}, 1000);
+			});
+			
+		} catch (error) {
+			console.error('Analysis failed:', error);
+			hideLoading();
+			ideaForm.style.display = 'flex';
+		}
+	});
+}
+
+function startTypewriter() {
+	const el = document.querySelector('#loading-typewriter .typewriter-text');
+	el.textContent = '';
+	let i = 0;
+	clearInterval(typewriterTimer);
+	typewriterTimer = setInterval(() => {
+		el.textContent = typewriterText.slice(0, i+1);
+		i++;
+		if (i >= typewriterText.length) clearInterval(typewriterTimer);
+	}, 38);
+}
+</script>
+<script src="js/ideas.js"></script>
+<script src="js/users.js"></script>
+<script src="js/users.js"></script>
+<script src="js/matching.js"></script>
+<script src="js/heat.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/gemini.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	body {
+		background-color: #000000;
+		color: #ffffff;
+		font-family: 'Segoe UI', Arial, sans-serif;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.navbar {
+		width: 100%;
+		padding: 1.5rem 3rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: #000000;
+		border-bottom: 1px solid #333333;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	.navbar .logo {
+		font-size: 1.8rem;
+		font-weight: 700;
+		color: #ffffff;
+		letter-spacing: 2px;
+	}
+
+	.navbar nav {
+		display: flex;
+		gap: 3rem;
+	}
+
+	.navbar nav a {
+		color: #ffffff;
+		text-decoration: none;
+		font-weight: 500;
+		transition: color 0.3s;
+	}
+
+	.navbar nav a:hover {
+		color: #f59e0b;
+	}
+
+	.page-header {
+		text-align: center;
+		padding: 4rem 2rem;
+		background-color: #000000;
+	}
+
+	.header-label {
+		font-size: 0.85rem;
+		font-weight: 700;
+		letter-spacing: 3px;
+		color: #f59e0b;
+		text-transform: uppercase;
+		margin-bottom: 1rem;
+	}
+
+	.header-title {
+		font-size: 3.5rem;
+		font-weight: 700;
+		color: #ffffff;
+		margin-bottom: 1rem;
+	}
+
+	.header-subtitle {
+		font-size: 1.1rem;
+		color: #999999;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.main-container {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+		background-color: #000000;
+	}
+
+	.glass-card {
+		background-color: #111111;
+		border: 2px solid #f59e0b;
+		border-top: 3px solid #f59e0b;
+		border-radius: 16px;
+		padding: 3rem;
+		width: 100%;
+		max-width: 500px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.form-group {
+		width: 100%;
+		margin-bottom: 2rem;
+		display: flex;
+		flex-direction: column;
+	}
+
+	label {
+		color: #ffffff;
+		font-size: 1rem;
+		font-weight: 600;
+		margin-bottom: 0.75rem;
+		letter-spacing: 0.5px;
+	}
+
+	input[type="text"],
+	textarea {
+		background-color: #1a1a1a;
+		border: 1px solid #333333;
+		border-radius: 8px;
+		padding: 1rem;
+		color: #ffffff;
+		font-size: 1rem;
+		font-family: inherit;
+		outline: none;
+		transition: border-color 0.3s, box-shadow 0.3s;
+	}
+
+	input[type="text"]::placeholder,
+	textarea::placeholder {
+		color: #666666;
+	}
+
+	input[type="text"]:focus,
+	textarea:focus {
+		border-color: #f59e0b;
+		box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+	}
+
+	textarea {
+		min-height: 120px;
+		resize: vertical;
+	}
+
+	.char-counter {
+		margin-top: 0.5rem;
+		font-size: 0.9rem;
+		text-align: right;
+		color: #999999;
+		font-weight: 500;
+		transition: color 0.3s;
+	}
+
+	.char-counter.orange {
+		color: #f59e0b;
+	}
+
+	.char-counter.red {
+		color: #ef4444;
+	}
+
+	.submit-btn {
+		margin-top: 1.5rem;
+		width: 100%;
+		padding: 1.2rem;
+		border: none;
+		border-radius: 8px;
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: #ffffff;
+		background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%);
+		cursor: pointer;
+		transition: transform 0.2s, box-shadow 0.2s;
+		box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+	}
+
+	.submit-btn:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+	}
+
+	.submit-btn:active {
+		transform: translateY(0);
+	}
+
+	#tags-container {
+		display: none;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin-top: 1.5rem;
+		width: 100%;
+	}
+
+	#tags-container span {
+		background-color: #f59e0b;
+		color: #000000;
+		padding: 0.5rem 1rem;
+		border-radius: 20px;
+		font-size: 0.9rem;
+		font-weight: 600;
+	}
+
+	#loading-state {
+		display: none;
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.95);
+		z-index: 100;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	#loading-state .loading-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2rem;
+	}
+
+	#loading-state svg circle.spin-ring {
+		animation: spin-ring 2s linear infinite;
+	}
+
+	@keyframes spin-ring {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
+	}
+
+	#loading-state .typewriter-text {
+		color: #f59e0b;
+		font-size: 1.3rem;
+		font-weight: 600;
+		min-height: 1.5em;
+	}
+
+	#ai-results {
+		display: none;
+		flex-direction: column;
+		gap: 2rem;
+		width: 100%;
+		max-width: 500px;
+		background-color: #111111;
+		border: 2px solid #333333;
+		border-radius: 16px;
+		padding: 3rem;
+		margin: 2rem auto;
+	}
+
+	#ai-results .ai-result-title {
+		color: #ffffff;
+		font-size: 2rem;
+		font-weight: 700;
+		text-align: center;
+		margin: 0 0 1rem 0;
+	}
+
+	.ai-metric {
+		width: 100%;
+	}
+
+	.ai-metric-head {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 0.75rem;
+		color: #ffffff;
+		font-weight: 600;
+		font-size: 1rem;
+	}
+
+	.ai-bar-track {
+		width: 100%;
+		height: 12px;
+		background-color: #1a1a1a;
+		border-radius: 10px;
+		overflow: hidden;
+		border: 1px solid #333333;
+	}
+
+	.ai-bar-fill {
+		height: 100%;
+		background: #f59e0b;
+		border-radius: 10px;
+		width: 0;
+		transition: width 1.5s ease-out;
+	}
+
+	#ai-verdict {
+		background-color: #1a1a1a;
+		border: 1px solid #333333;
+		border-radius: 8px;
+		padding: 1.5rem;
+		color: #ffffff;
+		line-height: 1.6;
+		font-size: 1rem;
+		min-height: 5rem;
+	}
+
+	#teammate-card {
+		display: none;
+		background-color: #1a1a1a;
+		border: 2px solid #f59e0b;
+		border-radius: 12px;
+		padding: 1.5rem;
+		margin-top: 1.5rem;
+		width: 100%;
+	}
+
+	.teammate-card-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 1rem;
+	}
+
+	.ai-suggestion-badge {
+		background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+		color: #000000;
+		padding: 0.4rem 1rem;
+		border-radius: 20px;
+		font-size: 0.9rem;
+		font-weight: 700;
+	}
+
+	#teammate-size {
+		color: #ffffff;
+		font-size: 0.95rem;
+		font-weight: 600;
+		margin: 0 0 0.75rem 0;
+	}
+
+	#teammate-roles {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.role-pill {
+		background-color: #066e59;
+		color: #ffffff;
+		padding: 0.4rem 0.9rem;
+		border-radius: 15px;
+		font-size: 0.85rem;
+		font-weight: 600;
+	}
+
+	.teammate-toggle-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid #333333;
+	}
+
+	.teammate-toggle-label {
+		color: #ffffff;
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 50px;
+		height: 28px;
+	}
+
+	.switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #333333;
+		border-radius: 20px;
+		transition: 0.3s;
+	}
+
+	.slider:before {
+		position: absolute;
+		content: '';
+		height: 22px;
+		width: 22px;
+		left: 3px;
+		bottom: 3px;
+		background-color: #ffffff;
+		border-radius: 50%;
+		transition: 0.3s;
+	}
+
+	input:checked + .slider {
+		background-color: #f59e0b;
+	}
+
+	input:checked + .slider:before {
+		transform: translateX(22px);
+	}
+
+	#teammate-privacy-status {
+		color: #999999;
+		font-size: 0.85rem;
+		font-weight: 600;
+		margin-top: 0.75rem;
+		transition: color 0.3s;
+	}
+
+	#teammate-privacy-status.open {
+		color: #10b981;
+	}
+
+	#confirm-post-btn {
+		display: none;
+		margin: 2rem auto 0;
+		padding: 1.2rem 2.5rem;
+		background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+		color: #000000;
+		border: none;
+		border-radius: 8px;
+		font-size: 1.1rem;
+		font-weight: 700;
+		cursor: pointer;
+		transition: transform 0.2s, box-shadow 0.2s;
+		box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+	}
+
+	#confirm-post-btn:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+	}
+
+	.shake-error {
+		animation: shake 0.3s;
+	}
+
+	@keyframes shake {
+		0%, 100% { transform: translateX(0); }
+		25% { transform: translateX(-10px); }
+		75% { transform: translateX(10px); }
+	}
+
+	.confetti-burst {
+		animation: confetti-burst 0.8s;
+	}
+
+	@keyframes confetti-burst {
+		0% { opacity: 1; }
+		100% { opacity: 0; }
+	}
+
+	@media (max-width: 768px) {
+		.navbar {
+			padding: 1rem 1.5rem;
+		}
+
+		.navbar nav {
+			gap: 1.5rem;
+		}
+
+		.header-title {
+			font-size: 2.5rem;
+		}
+
+		.glass-card,
+		#ai-results {
+			max-width: 95vw;
+			padding: 1.5rem;
+		}
+
+		.main-container {
+			padding: 1rem;
+		}
+	}
+</style>

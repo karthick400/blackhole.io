@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlackHole.io</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+  <style>
+    :root {
+      --bg: #000000;
+      --card: #111111;
+      --text: #ffffff;
+      --muted: #9ca3af;
+      --gold: #f59e0b;
+      --purple: #7c3aed;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #000000;
+      color: #ffffff;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+    }
+
+    .logo,
+    .hero-title,
+    .feature-title {
+      font-family: "Sora", "Manrope", sans-serif;
+    }
+
+    body {
+      opacity: 0;
+      animation: page-fade-in 450ms ease-out forwards;
+    }
+
+    @keyframes page-fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .page-shell {
+      position: relative;
+      z-index: 5;
+    }
+
+    #particles-canvas,
+    #space-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000000;
+      z-index: 0;
+    }
+
+    #particles-canvas {
+      z-index: 0;
+      opacity: 1;
+    }
+
+    #space-canvas {
+      z-index: 1;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #000000;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.22);
+      backdrop-filter: blur(6px);
+    }
+
+    .navbar-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 70px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+    }
+
+    .logo-img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .logo .dot {
+      color: #f59e0b;
+      padding: 0 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #f59e0b;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 10;
+      min-height: calc(100vh - 70px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 20px 52px;
+    }
+
+    .hero-content {
+      width: min(1120px, 100%);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124, 58, 237, 0.28);
+      border: 1px solid rgba(124, 58, 237, 0.58);
+      color: #ddd6fe;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      margin-bottom: 20px;
+    }
+
+    .hero-badge i {
+      font-size: 0.72rem;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(2.6rem, 6.5vw, 80px);
+      line-height: 1.02;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      text-wrap: balance;
+      text-shadow: 0 0 55px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-subtitle {
+      margin: 22px auto 0;
+      max-width: 840px;
+      color: #9ca3af;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      margin-top: 34px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      text-decoration: none;
+      padding: 14px 30px;
+      min-width: 190px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .hero-btn-primary {
+      background: #7c3aed;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 30px rgba(124, 58, 237, 0.38);
+    }
+
+    .hero-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 40px rgba(124, 58, 237, 0.52);
+    }
+
+    .hero-btn-secondary {
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.38);
+    }
+
+    .hero-btn-secondary:hover {
+      border-color: rgba(245, 158, 11, 0.62);
+      color: #fcd38b;
+      transform: translateY(-1px);
+    }
+
+    .stats-row {
+      margin-top: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      color: #9ca3af;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.32);
+      overflow: hidden;
+    }
+
+    .stat-chip {
+      padding: 10px 16px;
+      white-space: nowrap;
+    }
+
+    .stat-chip + .stat-chip {
+      border-left: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .features {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 24px 56px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: #111111;
+      border-radius: 14px;
+      border-top: 3px solid #f59e0b;
+      border-right: 1px solid rgba(245, 158, 11, 0.18);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.18);
+      border-left: 1px solid rgba(245, 158, 11, 0.18);
+      padding: 22px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.48);
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      display: inline-flex;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.36);
+    }
+
+    .feature-icon i {
+      font-size: 1rem;
+      color: #fcd37f;
+    }
+
+    .feature-title {
+      margin: 0;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      margin: 10px 0 0;
+      color: #9ca3af;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 920px) {
+      .features {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .navbar-content {
+        min-height: auto;
+        flex-wrap: wrap;
+        padding: 12px 16px;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 1rem;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 58px;
+      }
+
+      .stats-row {
+        border-radius: 16px;
+      }
+
+      .stat-chip {
+        width: 100%;
+      }
+
+      .stat-chip + .stat-chip {
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .features {
+        grid-template-columns: 1fr;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+  <canvas id="space-canvas" aria-hidden="true"></canvas>
+
+  <div class="page-shell">
+    <nav class="navbar">
+      <div class="navbar-content">
+        <a class="logo" href="index.html"><img src="assets/logo.png" alt="BlackHole logo" class="logo-img" onerror="this.style.display='none'"><span>BlackHole<span class="dot">.</span>io</span></a>
+        <div class="nav-links">
+          <a href="explore.html">Explore</a>
+          <a href="submit.html">Submit Idea</a>
+          <a href="dashboard.html">Dashboard</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="hero">
+      <section class="hero-content">
+        <div class="hero-badge"><i class="fa-solid fa-microchip" aria-hidden="true"></i> AI-Powered Idea Validation</div>
+        <h1 class="hero-title">Where student ideas meet gravitational force</h1>
+        <p class="hero-subtitle">Submit your startup idea. Our AI pulls it apart and tells you if it worth building — before you waste a semester on it.</p>
+        <div class="hero-actions">
+          <a class="hero-btn hero-btn-primary" href="submit.html">Validate my idea</a>
+          <a class="hero-btn hero-btn-secondary" href="explore.html">See examples</a>
+        </div>
+        <div class="stats-row" aria-label="Platform stats">
+          <span class="stat-chip">2,400+ Ideas validated</span>
+          <span class="stat-chip">87% Accuracy rate</span>
+          <span class="stat-chip">12s Avg report time</span>
+        </div>
+      </section>
+    </main>
+
+    <section class="features">
+      <article class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+        <h3 class="feature-title">Instant Analysis</h3>
+        <p class="feature-desc">Get AI-powered feedback on your startup idea in seconds, not weeks.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i></div>
+        <h3 class="feature-title">Market Validation</h3>
+        <p class="feature-desc">Discover if your idea fills a real market gap with data-driven insights.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-rocket" aria-hidden="true"></i></div>
+        <h3 class="feature-title">Growth Blueprint</h3>
+        <p class="feature-desc">Get actionable recommendations to take your idea from concept to launch.</p>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("space-canvas");
+    const ctx = canvas.getContext("2d");
+
+    const starCount = 200;
+    const lensDotCount = 300;
+    const particleCount = 80;
+
+    const stars = [];
+    const particles = [];
+    const particlePalette = ["#ffffff", "#a78bfa", "#818cf8", "#c4b5fd", "#e0e7ff"];
+
+    let width = 0;
+    let height = 0;
+    let cx = 0;
+    let cy = 0;
+    let eventHorizonRadius = 0;
+    let diskRotation = 0;
+    let lastTime = performance.now();
+
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function edgeSpawn() {
+      const side = Math.floor(Math.random() * 4);
+      if (side === 0) {
+        return { x: randomRange(0, width), y: -8 };
+      }
+      if (side === 1) {
+        return { x: width + 8, y: randomRange(0, height) };
+      }
+      if (side === 2) {
+        return { x: randomRange(0, width), y: height + 8 };
+      }
+      return { x: -8, y: randomRange(0, height) };
+    }
+
+    function randomFarSpawn() {
+      let x = randomRange(0, width);
+      let y = randomRange(0, height);
+      let tries = 0;
+      while (Math.hypot(cx - x, cy - y) < eventHorizonRadius * 1.35 && tries < 12) {
+        x = randomRange(0, width);
+        y = randomRange(0, height);
+        tries += 1;
+      }
+      return { x: x, y: y };
+    }
+
+    function createStar() {
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: randomRange(0.5, 1.6),
+        baseAlpha: randomRange(0.35, 0.9),
+        phase: randomRange(0, Math.PI * 2),
+        speed: randomRange(0.4, 1.2)
+      };
+    }
+
+    function createParticle() {
+      const spawn = randomFarSpawn();
+      return {
+        x: spawn.x,
+        y: spawn.y,
+        prevX: spawn.x,
+        prevY: spawn.y,
+        vx: randomRange(-0.03, 0.03),
+        vy: randomRange(-0.03, 0.03),
+        r: randomRange(1.5, 3),
+        color: particlePalette[Math.floor(Math.random() * particlePalette.length)],
+        noisePhase: randomRange(0, Math.PI * 2),
+        drift: randomRange(0.45, 1.15)
+      };
+    }
+
+    function setupScene() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cx = width * 0.5;
+      cy = height * 0.5;
+      eventHorizonRadius = Math.min(width, height) * 0.18;
+
+      stars.length = 0;
+      for (let i = 0; i < starCount; i += 1) {
+        stars.push(createStar());
+      }
+
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i += 1) {
+        particles.push(createParticle());
+      }
+    }
+
+    function drawBackground() {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    function drawStars(timeSeconds) {
+      for (let i = 0; i < stars.length; i += 1) {
+        const s = stars[i];
+        const twinkle = 0.55 + 0.45 * Math.sin(timeSeconds * s.speed + s.phase);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(235, 238, 245," + (s.baseAlpha * twinkle).toFixed(3) + ")";
+        ctx.fill();
+      }
+    }
+
+    function drawPhotonRing() {
+      const ringRadius = eventHorizonRadius * 1.04;
+      const bloomRadius = ringRadius * 1.6;
+
+      const bloom = ctx.createRadialGradient(cx, cy, ringRadius, cx, cy, bloomRadius);
+      bloom.addColorStop(0, "rgba(255, 248, 231, 0.4)");
+      bloom.addColorStop(1, "rgba(200, 134, 10, 0)");
+      ctx.beginPath();
+      ctx.arc(cx, cy, bloomRadius, 0, Math.PI * 2);
+      ctx.fillStyle = bloom;
+      ctx.fill();
+
+      const ringLayers = [
+        { lineWidth: eventHorizonRadius * 0.23, color: "rgba(200, 134, 10, 0.20)", radius: ringRadius + eventHorizonRadius * 0.08 },
+        { lineWidth: eventHorizonRadius * 0.13, color: "rgba(226, 173, 66, 0.36)", radius: ringRadius + eventHorizonRadius * 0.03 },
+        { lineWidth: eventHorizonRadius * 0.08, color: "rgba(255, 234, 188, 0.58)", radius: ringRadius },
+        { lineWidth: eventHorizonRadius * 0.038, color: "rgba(255, 248, 231, 0.95)", radius: ringRadius - eventHorizonRadius * 0.01 }
+      ];
+
+      for (let i = 0; i < ringLayers.length; i += 1) {
+        const layer = ringLayers[i];
+        ctx.beginPath();
+        ctx.arc(cx, cy, layer.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = layer.color;
+        ctx.lineWidth = layer.lineWidth;
+        ctx.stroke();
+      }
+    }
+
+    function drawAccretionDisk() {
+      const diskHalfWidth = eventHorizonRadius * 2.6;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(diskRotation);
+      ctx.scale(1, 0.08);
+
+      const gradient = ctx.createLinearGradient(-diskHalfWidth, 0, diskHalfWidth, 0);
+      gradient.addColorStop(0, "rgba(255, 248, 231, 0)");
+      gradient.addColorStop(0.22, "rgba(210, 155, 56, 0.22)");
+      gradient.addColorStop(0.5, "rgba(255, 248, 231, 0.95)");
+      gradient.addColorStop(0.78, "rgba(210, 155, 56, 0.22)");
+      gradient.addColorStop(1, "rgba(255, 248, 231, 0)");
+
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, diskHalfWidth, 34, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(diskRotation + (12 * Math.PI) / 180);
+      ctx.scale(1, 0.08);
+
+      const gradient2 = ctx.createLinearGradient(-diskHalfWidth * 1.08, 0, diskHalfWidth * 1.08, 0);
+      gradient2.addColorStop(0, "rgba(255, 248, 231, 0)");
+      gradient2.addColorStop(0.22, "rgba(183, 129, 31, 0.14)");
+      gradient2.addColorStop(0.5, "rgba(255, 230, 170, 0.58)");
+      gradient2.addColorStop(0.78, "rgba(183, 129, 31, 0.14)");
+      gradient2.addColorStop(1, "rgba(255, 248, 231, 0)");
+
+      ctx.strokeStyle = gradient2;
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, diskHalfWidth * 1.08, 42, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawPerpendicularSaturnRing(timeSeconds) {
+      const ringA = eventHorizonRadius * 1.95;
+      const ringB = eventHorizonRadius * 0.65;
+      const wobble = Math.sin(timeSeconds * 0.6) * 0.1;
+      const pulse = 0.32 + 0.16 * Math.sin(timeSeconds * 1.8);
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(Math.PI / 2 + wobble);
+
+      const ringGlow = ctx.createLinearGradient(-ringA, 0, ringA, 0);
+      ringGlow.addColorStop(0, "rgba(124, 58, 237, 0)");
+      ringGlow.addColorStop(0.5, "rgba(255, 236, 196, " + pulse.toFixed(3) + ")");
+      ringGlow.addColorStop(1, "rgba(124, 58, 237, 0)");
+
+      ctx.strokeStyle = ringGlow;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, ringA, ringB, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      const ringCore = ctx.createLinearGradient(-ringA * 0.72, 0, ringA * 0.72, 0);
+      ringCore.addColorStop(0, "rgba(255, 248, 231, 0)");
+      ringCore.addColorStop(0.5, "rgba(255, 248, 231, 0.9)");
+      ringCore.addColorStop(1, "rgba(255, 248, 231, 0)");
+
+      ctx.strokeStyle = ringCore;
+      ctx.lineWidth = 1.1;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, ringA * 0.82, ringB * 0.82, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawLensingShimmer(timeSeconds) {
+      for (let i = 0; i < lensDotCount; i += 1) {
+        const angle = (i / lensDotCount) * Math.PI * 2;
+        const r = eventHorizonRadius * (1 + 0.04 * Math.sin(angle * 8 + timeSeconds * 3));
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
+        ctx.beginPath();
+        ctx.arc(x, y, 1, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 240, 200, 0.6)";
+        ctx.fill();
+      }
+    }
+
+    function updateAndDrawParticles(deltaSeconds, timeSeconds) {
+      for (let i = 0; i < particles.length; i += 1) {
+        const p = particles[i];
+
+        p.prevX = p.x;
+        p.prevY = p.y;
+
+        const dx = cx - p.x;
+        const dy = cy - p.y;
+        const dist = Math.max(Math.hypot(dx, dy), 1);
+
+        const force = 0.0065 / Math.pow(dist, 0.6);
+        const dtScale = deltaSeconds * 2.8;
+        p.vx += (dx / dist) * force * dist * dtScale;
+        p.vy += (dy / dist) * force * dist * dtScale;
+
+        // Subtle turbulence keeps the inward flow organic instead of forming strict bands.
+        p.vx += Math.sin(timeSeconds * p.drift + p.noisePhase) * 0.004 * deltaSeconds;
+        p.vy += Math.cos(timeSeconds * (p.drift * 0.9) + p.noisePhase) * 0.004 * deltaSeconds;
+
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        ctx.beginPath();
+        ctx.moveTo(p.prevX, p.prevY);
+        ctx.lineTo(p.x, p.y);
+        ctx.strokeStyle = "rgba(196, 181, 253, 0.1)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+
+        const reachedHorizon = Math.hypot(cx - p.x, cy - p.y) <= eventHorizonRadius;
+        const outOfBounds = p.x < -20 || p.y < -20 || p.x > width + 20 || p.y > height + 20;
+
+        if (reachedHorizon || outOfBounds) {
+          const spawn = randomFarSpawn();
+          p.x = spawn.x;
+          p.y = spawn.y;
+          p.prevX = p.x;
+          p.prevY = p.y;
+          p.vx = randomRange(-0.03, 0.03);
+          p.vy = randomRange(-0.03, 0.03);
+        }
+      }
+    }
+
+    function drawEventHorizon() {
+      ctx.beginPath();
+      ctx.arc(cx, cy, eventHorizonRadius, 0, Math.PI * 2);
+      ctx.fillStyle = "#000000";
+      ctx.fill();
+    }
+
+    function frame(now) {
+      const deltaSeconds = Math.min((now - lastTime) / 1000, 0.04);
+      const timeSeconds = now / 1000;
+      lastTime = now;
+
+      diskRotation = (timeSeconds / 18) * Math.PI * 2;
+
+      drawBackground();
+      drawStars(timeSeconds);
+      updateAndDrawParticles(deltaSeconds, timeSeconds);
+      drawPhotonRing();
+      drawAccretionDisk();
+      drawPerpendicularSaturnRing(timeSeconds);
+      drawLensingShimmer(timeSeconds);
+      drawEventHorizon();
+
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener("resize", setupScene);
+
+    setupScene();
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>

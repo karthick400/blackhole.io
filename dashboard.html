@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | BlackHole.io</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWix+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8J4J8L+H5Qz8C4W2Y8M2R7N2R5Q4hQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #111111;
+            --surface-soft: #161616;
+            --text: #ffffff;
+            --muted: #9ca3af;
+            --gold: #f59e0b;
+            --purple: #7c3aed;
+            --green: #22c55e;
+            --danger: #ef4444;
+            --border: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+            font-family: "Manrope", "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 16% 8%, rgba(124, 58, 237, 0.16), transparent 34%),
+                radial-gradient(circle at 88% 20%, rgba(245, 158, 11, 0.15), transparent 34%),
+                radial-gradient(circle at 50% 100%, rgba(124, 58, 237, 0.1), transparent 45%),
+                var(--bg);
+        }
+
+        .brand,
+        .welcome-title,
+        .section-title,
+        .idea-title {
+            font-family: "Sora", "Manrope", sans-serif;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 120;
+            background: #000000;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.26);
+            backdrop-filter: blur(8px);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+        }
+
+        .brand img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #d1d5db;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            border: 1px solid rgba(245, 158, 11, 0.32);
+            background: #111111;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #f3f4f6;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .notification-btn i {
+            font-size: 0.95rem;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(245, 158, 11, 0.6);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            padding: 0 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            background: var(--gold);
+            color: #000000;
+            border: 2px solid #000000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 24px 44px;
+        }
+
+        .glass-card {
+            background: #111111;
+            border: 1px solid rgba(245, 158, 11, 0.14);
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        .welcome-section {
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .welcome-emoji {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.16);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--gold);
+            flex: 0 0 82px;
+        }
+
+        .welcome-kicker {
+            color: var(--muted);
+            font-size: 0.98rem;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            line-height: 1.1;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.35rem;
+        }
+
+        .welcome-subtitle {
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 18px;
+            text-align: left;
+            background: #111111;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+            line-height: 1.1;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.8rem;
+            margin-top: 0.38rem;
+            letter-spacing: 0.03em;
+            text-transform: none;
+        }
+
+        .section {
+            margin-bottom: 34px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .requests-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .idea-card,
+        .request-card {
+            padding: 16px;
+            background: #111111;
+        }
+
+        .idea-card-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .idea-title {
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.35;
+            color: #ffffff;
+        }
+
+        .privacy-badge {
+            border-radius: 999px;
+            font-size: 0.73rem;
+            padding: 4px 9px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.04);
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        .privacy-public {
+            color: #22c55e;
+            border-color: rgba(34, 197, 94, 0.45);
+            background: rgba(34, 197, 94, 0.12);
+        }
+
+        .privacy-private {
+            color: #d1d5db;
+            border-color: rgba(156, 163, 175, 0.45);
+            background: rgba(156, 163, 175, 0.14);
+        }
+
+        .score-strip {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .score-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .score-dot i {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-feasibility {
+            background: #22c55e;
+        }
+
+        .dot-originality {
+            background: #f59e0b;
+        }
+
+        .dot-impact {
+            background: #7c3aed;
+        }
+
+        .incoming-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            margin-bottom: 12px;
+            color: var(--gold);
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.38);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-weight: 700;
+        }
+
+        .idea-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            flex: 1;
+            transition: all 0.2s ease;
+        }
+
+        .btn-edit {
+            background: transparent;
+            color: #d1d5db;
+            border-color: rgba(156, 163, 175, 0.6);
+        }
+
+        .btn-edit:hover {
+            background: rgba(156, 163, 175, 0.14);
+            border-color: rgba(209, 213, 219, 0.75);
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.65);
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.14);
+        }
+
+        .request-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-radius: 12px;
+        }
+
+        .btn-view {
+            background: #7c3aed;
+            border-color: rgba(255, 255, 255, 0.12);
+            width: auto;
+            margin-top: 0;
+            flex: none;
+            min-width: 130px;
+        }
+
+        .btn-view:hover {
+            background: #6d28d9;
+        }
+
+        .request-count {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            padding: 20px;
+            text-align: center;
+            color: var(--muted);
+            border-radius: 14px;
+            border: 1px dashed rgba(245, 158, 11, 0.35);
+            background: #111111;
+            grid-column: 1 / -1;
+        }
+
+        #drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 190;
+        }
+
+        #drawer-overlay.drawer-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #collab-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: min(440px, 100%);
+            height: 100%;
+            z-index: 200;
+            transform: translateX(100%);
+            transition: transform 0.28s ease;
+            background: #0d0d0d;
+            border-left: 1px solid rgba(245, 158, 11, 0.26);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #collab-drawer.drawer-open {
+            transform: translateX(0);
+        }
+
+        .drawer-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.24);
+        }
+
+        .drawer-title {
+            font-size: 1.02rem;
+            font-weight: 700;
+        }
+
+        .drawer-close-btn {
+            background: transparent;
+            border: 0;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        #requests-list {
+            padding: 14px;
+            overflow-y: auto;
+            flex: 1;
+            display: grid;
+            gap: 10px;
+        }
+
+        .request-item {
+            border: 1px solid rgba(245, 158, 11, 0.22);
+            border-radius: 12px;
+            padding: 10px;
+            background: #151515;
+        }
+
+        .request-item-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #ffffff;
+        }
+
+        .request-item-meta {
+            color: var(--muted);
+            font-size: 0.84rem;
+        }
+
+        @media (max-width: 980px) {
+            .stats-row,
+            .ideas-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 680px) {
+            .navbar-content {
+                flex-wrap: wrap;
+                padding: 10px 16px;
+            }
+
+            .stats-row,
+            .ideas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .request-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-view {
+                width: 100%;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="brand">
+                <img src="assets/logo.png" alt="BlackHole logo" onerror="this.style.display='none'">
+                <span>BlackHole.io</span>
+            </div>
+            <div class="nav-links">
+                <a href="explore.html" class="nav-link">Explore</a>
+                <a href="submit.html" class="nav-link">Submit Idea</a>
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <button id="nav-bell" class="notification-btn" aria-label="Pending requests">
+                    <span aria-hidden="true"><i class="fa-regular fa-bell"></i></span>
+                    <span id="notification-badge" class="notification-badge" style="display:none;">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="welcome-section glass-card">
+            <div class="welcome-emoji" id="user-emoji">👤</div>
+            <div>
+                <p class="welcome-kicker">Welcome back</p>
+                <h1 class="welcome-title"><span id="user-name">User</span></h1>
+                <p class="welcome-subtitle">Track your ideas, reactions, and incoming collaboration requests.</p>
+            </div>
+        </section>
+
+        <section class="stats-row">
+            <div class="stat-card glass-card">
+                <div class="stat-value" id="stat-total-ideas">0</div>
+                <div class="stat-label">Total Ideas</div>
+            </div>
+            <div class="stat-card glass-card">
+                <div class="stat-value" id="stat-total-reactions">0</div>
+                <div class="stat-label">Total Reactions</div>
+            </div>
+            <div class="stat-card glass-card">
+                <div class="stat-value" id="stat-pending-requests">0</div>
+                <div class="stat-label">Pending Requests</div>
+            </div>
+            <div class="stat-card glass-card">
+                <div class="stat-value" id="stat-public-ideas">0</div>
+                <div class="stat-label">Public Ideas</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2 class="section-title">My Ideas</h2>
+            </div>
+            <div class="ideas-grid" id="my-ideas-grid"></div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2 class="section-title">Incoming Requests</h2>
+            </div>
+            <div class="requests-grid" id="incoming-requests-grid"></div>
+        </section>
+    </main>
+
+    <div id="drawer-overlay"></div>
+
+    <aside id="collab-drawer" aria-hidden="true">
+        <div class="drawer-head">
+            <h3 class="drawer-title" id="drawer-title">Requests</h3>
+            <button class="drawer-close-btn" onclick="closeDrawer()" aria-label="Close">✕</button>
+        </div>
+        <div id="requests-list"></div>
+    </aside>
+
+    <script src="js/ideas.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/matching.js"></script>
+    <script src="js/heat.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/gemini.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        if (!getCurrentUser()) {
+            saveCurrentUser(createGuestUser());
+        }
+
+        let dashboardState = {
+            user: null,
+            userIdeas: [],
+            pendingByIdea: {},
+            totalPending: 0,
+            drawerIdeaId: null
+        };
+
+        function getReactionCount(reactions) {
+            if (Array.isArray(reactions)) {
+                return reactions.length;
+            }
+
+            if (typeof reactions === 'number') {
+                return reactions;
+            }
+
+            return 0;
+        }
+
+        function refreshDashboardData() {
+            const user = getCurrentUser();
+            if (!user) {
+                dashboardState = {
+                    user: null,
+                    userIdeas: [],
+                    pendingByIdea: {},
+                    totalPending: 0,
+                    drawerIdeaId: null
+                };
+                return;
+            }
+
+            const allIdeas = getAllIdeas();
+            const userIdeas = allIdeas.filter(idea => idea.ownerId === user.id);
+
+            const pendingByIdea = {};
+            let totalPending = 0;
+
+            userIdeas.forEach(idea => {
+                const requests = getRequestsForIdea(idea.id) || [];
+                const count = requests.length;
+                pendingByIdea[idea.id] = count;
+                totalPending += count;
+            });
+
+            dashboardState = {
+                user,
+                userIdeas,
+                pendingByIdea,
+                totalPending,
+                drawerIdeaId: dashboardState.drawerIdeaId
+            };
+        }
+
+        function loadWelcomeSection() {
+            const user = dashboardState.user;
+            if (!user) {
+                return;
+            }
+
+            document.getElementById('user-emoji').textContent = user.profileEmoji || user.emoji || '👤';
+            document.getElementById('user-name').textContent = user.name || 'User';
+        }
+
+        function updateStatsAndBell() {
+            const user = dashboardState.user;
+            const userIdeas = dashboardState.userIdeas;
+            const totalPending = dashboardState.totalPending;
+
+            if (!user) {
+                return;
+            }
+
+            const totalIdeas = Array.isArray(user.ideaIds) ? user.ideaIds.length : userIdeas.length;
+            const totalReactions = userIdeas.reduce((sum, idea) => sum + getReactionCount(idea.reactions), 0);
+            const publicIdeas = userIdeas.filter(idea => idea.isPublic).length;
+
+            document.getElementById('stat-total-ideas').textContent = totalIdeas;
+            document.getElementById('stat-total-reactions').textContent = totalReactions;
+            document.getElementById('stat-pending-requests').textContent = totalPending;
+            document.getElementById('stat-public-ideas').textContent = publicIdeas;
+
+            const badge = document.getElementById('notification-badge');
+            if (totalPending > 0) {
+                badge.style.display = 'inline-flex';
+                badge.textContent = totalPending > 99 ? '99+' : String(totalPending);
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function loadMyIdeas() {
+            const user = dashboardState.user;
+            if (!user) return;
+
+            const grid = document.getElementById('my-ideas-grid');
+            const userIdeas = dashboardState.userIdeas;
+
+            if (userIdeas.length === 0) {
+                grid.innerHTML = '<div class="empty-state">No ideas yet. Start by submitting your first idea.</div>';
+                return;
+            }
+
+            grid.innerHTML = userIdeas.map(idea => {
+                const pending = dashboardState.pendingByIdea[idea.id] || 0;
+                const privacyClass = idea.isPublic ? 'privacy-public' : 'privacy-private';
+                const privacyIcon = idea.isPublic
+                    ? '<i class="fa-solid fa-lock-open" aria-hidden="true"></i>'
+                    : '<i class="fa-solid fa-lock" aria-hidden="true"></i>';
+                const privacyLabel = idea.isPublic ? 'Public' : 'Private';
+                const feasibility = Number(idea.feasibility) || 0;
+                const originality = Number(idea.originality) || 0;
+                const impact = Number(idea.impact) || 0;
+
+                return `
+                    <article class="idea-card glass-card">
+                        <div class="idea-card-head">
+                            <h3 class="idea-title">${idea.title || 'Untitled Idea'}</h3>
+                            <span class="privacy-badge ${privacyClass}">${privacyIcon} ${privacyLabel}</span>
+                        </div>
+                        <div class="score-strip">
+                            <span class="score-dot"><i class="dot-feasibility"></i> Feasibility ${feasibility}</span>
+                            <span class="score-dot"><i class="dot-originality"></i> Originality ${originality}</span>
+                            <span class="score-dot"><i class="dot-impact"></i> Impact ${impact}</span>
+                        </div>
+                        <span class="incoming-badge"><i class="fa-regular fa-envelope" aria-hidden="true"></i> ${pending} pending request${pending === 1 ? '' : 's'}</span>
+                        <div class="idea-actions">
+                            <button class="btn btn-edit" onclick="editIdea('${idea.id}')">Edit</button>
+                            <button class="btn btn-delete" onclick="deleteIdeaAction('${idea.id}')">Delete</button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function loadIncomingRequests() {
+            const user = dashboardState.user;
+            if (!user) return;
+
+            const grid = document.getElementById('incoming-requests-grid');
+            const ideasWithRequests = dashboardState.userIdeas.filter(idea => (dashboardState.pendingByIdea[idea.id] || 0) > 0);
+
+            if (ideasWithRequests.length === 0) {
+                grid.innerHTML = '<div class="empty-state">No pending requests right now.</div>';
+                return;
+            }
+
+            grid.innerHTML = ideasWithRequests.map(idea => {
+                const pending = dashboardState.pendingByIdea[idea.id] || 0;
+
+                return `
+                    <article class="request-card glass-card">
+                        <h3 class="idea-title">${idea.title || 'Untitled Idea'}</h3>
+                        <div class="request-count">${pending} pending request${pending === 1 ? '' : 's'}</div>
+                        <button class="btn btn-view" onclick="openDrawer('${idea.id}')">View Requests</button>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function openDrawer(ideaId) {
+            const idea = dashboardState.userIdeas.find(item => item.id === ideaId);
+            const requests = getRequestsForIdea(ideaId) || [];
+
+            dashboardState.drawerIdeaId = ideaId;
+
+            const title = document.getElementById('drawer-title');
+            const list = document.getElementById('requests-list');
+            title.textContent = idea ? `Requests for ${idea.title}` : 'Requests';
+
+            if (requests.length === 0) {
+                list.innerHTML = '<div class="empty-state">No pending requests for this idea.</div>';
+            } else {
+                list.innerHTML = requests.map(req => {
+                    const requester = getUserById(req.requesterId);
+                    const requesterName = requester ? requester.name : 'Unknown User';
+                    const requesterCollege = requester ? (requester.college || 'College not set') : 'User details unavailable';
+                    const created = new Date(req.createdAt).toLocaleString();
+
+                    return `
+                        <div class="request-item">
+                            <div class="request-item-name">${requesterName}</div>
+                            <div class="request-item-meta">${requesterCollege}</div>
+                            <div class="request-item-meta">Requested on ${created}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('collab-drawer').classList.add('drawer-open');
+            document.getElementById('drawer-overlay').classList.add('drawer-open');
+            document.getElementById('collab-drawer').setAttribute('aria-hidden', 'false');
+        }
+
+        function closeDrawer() {
+            document.getElementById('collab-drawer').classList.remove('drawer-open');
+            document.getElementById('drawer-overlay').classList.remove('drawer-open');
+            document.getElementById('collab-drawer').setAttribute('aria-hidden', 'true');
+        }
+
+        function editIdea(ideaId) {
+            window.location.href = `submit.html?edit=${encodeURIComponent(ideaId)}`;
+        }
+
+        function deleteIdeaAction(ideaId) {
+            const confirmed = window.confirm('Are you sure you want to delete this idea?');
+            if (!confirmed) {
+                return;
+            }
+
+            deleteIdea(ideaId);
+
+            const user = getCurrentUser();
+            if (user && Array.isArray(user.ideaIds)) {
+                const updatedIdeaIds = user.ideaIds.filter(id => id !== ideaId);
+                updateCurrentUser({ ideaIds: updatedIdeaIds });
+
+                const directoryUser = getUserById(user.id);
+                if (directoryUser) {
+                    saveUserToDirectory(Object.assign({}, directoryUser, { ideaIds: updatedIdeaIds }));
+                }
+            }
+
+            initializeDashboard();
+        }
+
+        function initializeDashboard() {
+            refreshDashboardData();
+            loadWelcomeSection();
+            updateStatsAndBell();
+            loadMyIdeas();
+            loadIncomingRequests();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+
+            const overlay = document.getElementById('drawer-overlay');
+            overlay.addEventListener('click', closeDrawer);
+
+            const bell = document.getElementById('nav-bell');
+            bell.addEventListener('click', function() {
+                if (dashboardState.userIdeas.length === 0) {
+                    return;
+                }
+
+                const firstIdeaWithPending = dashboardState.userIdeas.find(idea => (dashboardState.pendingByIdea[idea.id] || 0) > 0);
+                const fallbackIdea = dashboardState.userIdeas[0];
+                openDrawer((firstIdeaWithPending || fallbackIdea).id);
+            });
+        });
+    </script>
+</body>
+</html>
