@@ -30,9 +30,9 @@ function saveIdea(obj) {
 		ownerCollege: obj.ownerCollege || '',
 		ownerEmoji: obj.ownerEmoji || '',
 		heatScore: typeof obj.heatScore === 'number' ? obj.heatScore : 0,
-		reactions: Array.isArray(obj.reactions) ? obj.reactions : [],
+		reactions: typeof obj.reactions === 'number' ? obj.reactions : 0,
 		views: typeof obj.views === 'number' ? obj.views : 0,
-		requests: Array.isArray(obj.requests) ? obj.requests : [],
+		requests: typeof obj.requests === 'number' ? obj.requests : 0,
 	};
 	let ideas = JSON.parse(localStorage.getItem('blackhole_ideas')) || [];
 	ideas.push(idea);

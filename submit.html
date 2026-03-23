@@ -914,13 +914,14 @@ if (ideaForm) {
 			}
 
 			const ideaObject = {
-				id: 'idea-' + Date.now(),
 				title: title,
 				description: description,
-				userId: currentUser.id,
-				userName: currentUser.name,
-				userEmail: currentUser.email,
-				openToTeammates: isOpenToTeam,
+				isPublic: true,
+				needsTeam: isOpenToTeam,
+				ownerId: currentUser.id,
+				ownerName: currentUser.name,
+				ownerCollege: currentUser.college || '',
+				ownerEmoji: currentUser.emoji || currentUser.profileEmoji || '🚀',
 				tags: result.tags || [],
 				feasibility: result.feasibility || 0,
 				originality: result.originality || 0,
@@ -928,6 +929,10 @@ if (ideaForm) {
 				verdict: result.verdict || '',
 				suggestedTeamSize: result.suggestedTeamSize || '',
 				suggestedRoles: result.suggestedRoles || [],
+				heatScore: 0,
+				reactions: 0,
+				views: 0,
+				requests: 0,
 				createdAt: new Date().toISOString()
 			};
 
@@ -963,7 +968,6 @@ function startTypewriter() {
 }
 </script>
 <script src="js/ideas.js"></script>
-<script src="js/users.js"></script>
 <script src="js/users.js"></script>
 <script src="js/matching.js"></script>
 <script src="js/heat.js"></script>

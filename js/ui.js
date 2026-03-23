@@ -1,6 +1,6 @@
 function renderIdeaCard(idea) {
-  const timeAgo = getTimeAgo(idea.created);
-  const heatLevel = idea.heat || 0;
+  const timeAgo = getTimeAgo(idea.createdAt);
+  const heatLevel = idea.heatScore || 0;
   const tagsHTML = (idea.tags || [])
     .map(tag => `<span style="background: #06b6d4; color: white; padding: 3px 10px; border-radius: 100px; font-size: 12px; display: inline-block; margin-right: 4px;">${tag}</span>`)
     .join('');
