@@ -98,6 +98,24 @@
       transition: color 0.2s ease;
     }
 
+    .nav-profile-link {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      text-decoration: none;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-profile-link:hover {
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.7);
+    }
+
     .nav-link:hover,
     .nav-link.active {
       color: var(--gold);
@@ -397,9 +415,9 @@
     }
 
     .react-btn {
-      background: rgba(245, 158, 11, 0.14);
-      color: var(--gold);
-      border: 1px solid rgba(245, 158, 11, 0.45);
+      background: var(--purple);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .join-btn {
@@ -537,6 +555,7 @@
         <a href="explore.html" class="nav-link active">Explore</a>
         <a href="submit.html" class="nav-link">Submit Idea</a>
         <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="profile.html" class="nav-profile-link" aria-label="Profile"><i class="fa-regular fa-user"></i></a>
       </div>
     </div>
   </nav>

@@ -4,12 +4,12 @@
 /**
  * Updates the heat score for an idea based on an action
  * @param {string} ideaId - The idea's unique identifier
- * @param {string} action - The type of action: "view" (1pt), "react" (3pts), "request" (5pts)
+ * @param {string} action - The type of action: "view" (1pt), "react" (1pt), "request" (5pts)
  */
 function updateHeatScore(ideaId, action) {
   const points = {
     view: 1,
-    react: 3,
+    react: 1,
     request: 5
   };
 

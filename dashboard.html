@@ -105,13 +105,31 @@
             color: var(--gold);
         }
 
+        .nav-profile-link {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-decoration: none;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-profile-link:hover {
+            color: var(--gold);
+            border-color: rgba(245, 158, 11, 0.7);
+        }
+
         .notification-btn {
             position: relative;
             width: 40px;
             height: 40px;
             border-radius: 11px;
-            border: 1px solid rgba(245, 158, 11, 0.32);
-            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: #7c3aed;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -127,7 +145,8 @@
 
         .notification-btn:hover {
             transform: translateY(-1px);
-            border-color: rgba(245, 158, 11, 0.6);
+            border-color: rgba(255, 255, 255, 0.24);
+            background: #6d28d9;
         }
 
         .notification-badge {
@@ -371,24 +390,24 @@
         }
 
         .btn-edit {
-            background: transparent;
-            color: #d1d5db;
-            border-color: rgba(156, 163, 175, 0.6);
+            background: #7c3aed;
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.14);
         }
 
         .btn-edit:hover {
-            background: rgba(156, 163, 175, 0.14);
-            border-color: rgba(209, 213, 219, 0.75);
+            background: #6d28d9;
+            border-color: rgba(255, 255, 255, 0.24);
         }
 
         .btn-delete {
-            background: transparent;
-            color: #fca5a5;
-            border-color: rgba(239, 68, 68, 0.65);
+            background: #7c3aed;
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.14);
         }
 
         .btn-delete:hover {
-            background: rgba(239, 68, 68, 0.14);
+            background: #6d28d9;
         }
 
         .request-card {
@@ -476,11 +495,17 @@
         }
 
         .drawer-close-btn {
-            background: transparent;
-            border: 0;
+            background: #7c3aed;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 8px;
+            padding: 4px 8px;
             color: #fff;
             cursor: pointer;
             font-size: 1.2rem;
+        }
+
+        .drawer-close-btn:hover {
+            background: #6d28d9;
         }
 
         #requests-list {
@@ -559,6 +584,7 @@
                 <a href="explore.html" class="nav-link">Explore</a>
                 <a href="submit.html" class="nav-link">Submit Idea</a>
                 <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="profile.html" class="nav-profile-link" aria-label="Profile"><i class="fa-regular fa-user"></i></a>
                 <button id="nav-bell" class="notification-btn" aria-label="Pending requests">
                     <span aria-hidden="true"><i class="fa-regular fa-bell"></i></span>
                     <span id="notification-badge" class="notification-badge" style="display:none;">0</span>

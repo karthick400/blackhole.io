@@ -87,10 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('click', function(event) {
     const ideasGrid = document.getElementById('ideas-grid');
     if (!ideasGrid) return;
+
+    const reactButton = event.target.closest('.react-btn');
+    const joinButton = event.target.closest('.join-btn');
     
     // Handle react button clicks
-    if (event.target.classList.contains('react-btn')) {
-        const card = event.target.closest('[data-id]');
+    if (reactButton) {
+        const card = reactButton.closest('[data-id]');
         if (!card) return;
         
         const ideaId = card.getAttribute('data-id');
@@ -103,29 +106,37 @@ document.addEventListener('click', function(event) {
         // Call updateHeatScore
         updateHeatScore(ideaId, 'react');
         localStorage.setItem(reactionKey, 'true');
-        
-        // Increment reaction count
-        const reactionSpan = card.querySelector('.reaction-count');
-        if (reactionSpan) {
-            reactionSpan.textContent = (parseInt(reactionSpan.textContent) || 0) + 1;
+
+        // Increment reaction count in button text (supports "React N" or icon+label variants).
+        const reactText = reactButton.textContent || '';
+        const countMatch = reactText.match(/(\d+)\s*$/);
+        const currentReactionCount = countMatch ? parseInt(countMatch[1], 10) : 0;
+        const nextReactionCount = currentReactionCount + 1;
+        reactButton.innerHTML = `<i class="fa-solid fa-bolt" aria-hidden="true"></i> React ${nextReactionCount}`;
+
+        // Increment visible heat value by exactly 1 after a react.
+        const heatValueEl = card.querySelector('.heat-value');
+        if (heatValueEl) {
+            const currentHeat = parseInt(heatValueEl.textContent, 10) || 0;
+            heatValueEl.textContent = String(currentHeat + 1);
         }
         
         // Add pop animation
-        event.target.classList.add('pop-animate');
+        reactButton.classList.add('pop-animate');
         setTimeout(() => {
-            event.target.classList.remove('pop-animate');
+            reactButton.classList.remove('pop-animate');
         }, 600);
     }
     
     // Handle join button clicks
-    if (event.target.classList.contains('join-btn')) {
+    if (joinButton) {
         const user = getCurrentUser();
         if (!user) {
             alert('Please sign up first!');
             return;
         }
         
-        const card = event.target.closest('[data-id]');
+        const card = joinButton.closest('[data-id]');
         if (!card) return;
         
         const ideaId = card.getAttribute('data-id');
@@ -142,7 +153,7 @@ document.addEventListener('click', function(event) {
         localStorage.setItem(requestKey, 'true');
         
         // Update button text
-        event.target.textContent = 'Request Sent ✓';
+        joinButton.textContent = 'Request Sent ✓';
         
         // Show toast notification
         const toast = document.createElement('div');
